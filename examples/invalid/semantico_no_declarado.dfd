@@ -1,0 +1,9 @@
+DFD "Referencia inexistente" {
+
+    ENTIDAD cliente "Cliente";
+
+    PROCESO p1 "Procesar solicitud";
+
+    FLUJO cliente -> p2 "Solicitud";
+
+}

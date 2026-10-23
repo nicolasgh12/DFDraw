@@ -1,0 +1,7 @@
+DFD "Identificador duplicado" {
+
+    ENTIDAD cliente "Cliente";
+
+    PROCESO cliente "Procesar cliente";
+
+}

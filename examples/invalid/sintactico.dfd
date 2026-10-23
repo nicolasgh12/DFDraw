@@ -1,0 +1,9 @@
+DFD "Error sintactico" {
+
+    ENTIDAD cliente "Cliente"
+
+    PROCESO p1 "Procesar solicitud";
+
+    FLUJO cliente -> p1 "Solicitud";
+
+}

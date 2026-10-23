@@ -1,0 +1,27 @@
+DFD "Sistema de Turnos" {
+
+    ENTIDAD paciente "Paciente";
+
+    ENTIDAD recepcionista "Recepcionista";
+
+
+    PROCESO p1 "Solicitar turno";
+
+    PROCESO p2 "Registrar turno";
+
+
+    ALMACEN turnos "Turnos";
+
+
+    FLUJO paciente -> p1 "Solicitud de turno";
+
+    FLUJO p1 -> p2 "Datos del turno";
+
+    FLUJO recepcionista -> p2 "Disponibilidad";
+
+    FLUJO p2 -> turnos "Turno registrado";
+
+    FLUJO p2 -> paciente "Confirmacion";
+
+}
+

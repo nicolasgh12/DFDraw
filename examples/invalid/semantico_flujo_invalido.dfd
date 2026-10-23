@@ -1,0 +1,9 @@
+DFD "Flujo invalido" {
+
+    ENTIDAD cliente "Cliente";
+
+    ENTIDAD proveedor "Proveedor";
+
+    FLUJO cliente -> proveedor "Pedido";
+
+}
