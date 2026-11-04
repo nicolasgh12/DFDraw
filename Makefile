@@ -1,9 +1,8 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -std=c11 -g
+CFLAGS = -Wall -Wextra -g
 
 TARGET = dfdc
-
 
 OBJECTS = \
 	main.o \

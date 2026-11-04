@@ -1,0 +1,37 @@
+DFD "Sistema de E-commerce" {
+    // Declaracion de los graficos del DFD
+    ENTIDAD cliente "Cliente";
+    ENTIDAD banco "Entidad Bancaria";
+    
+    PROCESO p1 "Registrar Pedido";
+    PROCESO p2 "Procesar Pago";
+    
+    ALMACEN pedidos "Base de Pedidos";
+    
+    FLUJO cliente -> p1 "Solicitud_de_compra";
+    FLUJO p1 -> p2 "Datos_de_cobro";
+    FLUJO p2 -> banco "Peticion_autorizacion";
+    FLUJO banco -> p2 "Estado_pago";
+    FLUJO p1 -> pedidos "Nuevo_pedido";
+
+    // Declaracion de las variables del diccionario
+    ESTRUCTURA datos_cliente "Informacion del comprador";
+    ESTRUCTURA detalle_item "Detalle de cada producto";
+    
+    ELEMENTO id_pedido "Identificador unico";
+    ELEMENTO cantidad "Cantidad comprada";
+    ELEMENTO total "Monto total";
+
+    // Definiciones complejas usando toda la sintaxis
+    pedidos = { id_pedido + datos_cliente + 1{detalle_item}20 + total };
+    
+    datos_cliente = "Nombre" + "Apellido" + ( "Email" ) + "Telefono";
+    
+    detalle_item = "ID_Producto" + cantidad + "Precio_Unitario";
+    
+    Solicitud_de_compra = datos_cliente + 1{detalle_item}20 + [ "Envio a domicilio" | "Retiro en sucursal" ];
+    
+    Estado_pago = [ "Aprobado" | "Rechazado" | "Pendiente" ];
+    
+    cantidad = 1-99;
+}

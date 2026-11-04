@@ -1,0 +1,12 @@
+DFD "Prisma Asistente Virtual" {
+    ENTIDAD cliente "Cliente";
+    ENTIDAD motor_ia "Motor de IA";
+    PROCESO p1 "Recibir consulta";
+    PROCESO p2 "Sintetizar respuesta";
+    ALMACEN logs "Historial de interacciones";
+    FLUJO cliente -> p1 "Mensaje de chat";
+    FLUJO p1 -> motor_ia "Contexto derivado";
+    FLUJO motor_ia -> p2 "Respuesta cruda";
+    FLUJO p2 -> logs "Registro de conversacion";
+    FLUJO p2 -> cliente "Mensaje formateado";
+}

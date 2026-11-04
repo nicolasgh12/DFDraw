@@ -4,6 +4,8 @@
 #include "ast.h"
 #include "semantic.h"
 #include "mermaid.h"
+#include "diccionario.h" /* NUEVO: Cabecera del diccionario de datos */
+
 
 
 /*
@@ -214,6 +216,14 @@ int main(
     printf(
         "Mermaid generado: %s\n",
         output_path
+    );
+
+
+    /* NUEVO: Generar el archivo CSV del diccionario de datos */
+    generar_csv_diccionario("diccionario.csv");
+
+    printf(
+        "Diccionario CSV generado: diccionario.csv\n"
     );
 
 

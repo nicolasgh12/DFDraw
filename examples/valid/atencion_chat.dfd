@@ -1,0 +1,12 @@
+DFD "Sistema de Atencion por Chat" {
+    ENTIDAD cliente "Cliente Web";
+    ENTIDAD secretario "Secretario";
+    PROCESO recepcion "Recepcion de Mensajes";
+    PROCESO resolucion "Resolucion de Consultas";
+    ALMACEN respuestas "Base de Conocimiento";
+    FLUJO cliente -> recepcion "Consulta inicial";
+    FLUJO recepcion -> resolucion "Ticket de chat";
+    FLUJO respuestas -> resolucion "Plantillas de texto";
+    FLUJO resolucion -> secretario "Chat asignado";
+    FLUJO resolucion -> cliente "Respuesta final";
+}

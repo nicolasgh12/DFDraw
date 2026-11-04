@@ -1,0 +1,11 @@
+DFD "Simulacion Interseccion Mitre y Uruguay" {
+    ENTIDAD trafico_uruguay "Trafico Av Uruguay";
+    ENTIDAD trafico_mitre "Trafico Av Mitre";
+    PROCESO gestor_llegadas "Gestor de Llegadas";
+    PROCESO control_semaforos "Control de Semaforos";
+    ALMACEN metricas "Metricas de Hora Pico";
+    FLUJO trafico_uruguay -> gestor_llegadas "Arribo de vehiculos";
+    FLUJO trafico_mitre -> gestor_llegadas "Arribo de vehiculos";
+    FLUJO gestor_llegadas -> control_semaforos "Cola de espera";
+    FLUJO control_semaforos -> metricas "Tiempos de espera";
+}
