@@ -1,0 +1,5 @@
+*.sh text eol=lf
+*.c whitespace=cr-at-eol
+*.h whitespace=cr-at-eol
+*.l whitespace=cr-at-eol
+*.y whitespace=cr-at-eol

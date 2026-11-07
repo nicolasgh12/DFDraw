@@ -1,0 +1,12 @@
+DFD "Atencion" {
+  ENTIDAD cliente "Cliente";
+  ENTIDAD agente "Agente";
+  PROCESO recibir "Recibir";
+  PROCESO resolver "Resolver";
+  ALMACEN registro "Registro";
+  FLUJO cliente -> recibir "Consulta";
+  FLUJO recibir -> resolver "Caso";
+  FLUJO registro -> resolver "Historial";
+  FLUJO resolver -> agente "Derivacion";
+  FLUJO resolver -> registro "Cierre";
+}

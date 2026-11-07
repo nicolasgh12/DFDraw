@@ -1,0 +1,15 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Atencion
+
+    cliente["Cliente"]
+    agente["Agente"]
+    recibir(("Recibir"))
+    resolver(("Resolver"))
+    registro@{ shape: datastore, label: "Registro" }
+
+    cliente -->|"Consulta"| recibir
+    recibir -->|"Caso"| resolver
+    registro -->|"Historial"| resolver
+    resolver -->|"Derivacion"| agente
+    resolver -->|"Cierre"| registro

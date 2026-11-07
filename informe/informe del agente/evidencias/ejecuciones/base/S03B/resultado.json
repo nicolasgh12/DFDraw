@@ -1,0 +1,42 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S03B-rdigou3p",
+  "codigo": 0,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S03B",
+  "archivos_compilador": [
+    "diccionario.csv",
+    "salida.mmd"
+  ],
+  "render": {
+    "argv": [
+      "node",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-mermaid\\node_modules\\@mermaid-js\\mermaid-cli\\src\\cli.js",
+      "-t",
+      "neutral",
+      "-p",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-mermaid-hq9p3rsa\\chrome.json",
+      "-c",
+      "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\informe\\diagramas\\mermaid_html.json",
+      "-i",
+      "salida.mmd",
+      "-o",
+      "salida.svg"
+    ],
+    "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S03B-rdigou3p",
+    "codigo": 1,
+    "stdout": "Generating single mermaid chart\n",
+    "stderr": "\nError: Parse error on line 3:\nflowchart LR    end[\"Caja \\\\\\\"A\\\\\\\"\"\n----------------^\nExpecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'subgraph', 'acc_title', 'acc_descr', 'acc_descr_multiline_value', 'AMP', 'COLON', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DOWN', 'DEFAULT', 'NUM', 'COMMA', 'NODE_STRING', 'BRKT', 'MINUS', 'MULT', 'UNICODE_TEXT', 'direction_tb', 'direction_bt', 'direction_rl', 'direction_lr', 'direction_td', got 'end'\nParser.parseError (C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-mermaid\\node_modules\\mermaid\\dist\\mermaid.js:107122:28)\n    at #evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:388:19)\n    at async ExecutionContext.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:275:16)\n    at async IsolatedWorld.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/IsolatedWorld.js:97:16)\n    at async CdpJSHandle.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/JSHandle.js:146:20)\n    at async CdpElementHandle.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:340:20)\n    at async CdpElementHandle.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:494:24)\n    at async CdpFrame.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/Frame.js:450:20)\n    at async CdpPage.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:450:20)\n    at async renderMermaid (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/@mermaid-js/mermaid-cli/src/index.js:266:22)\n    at fromText (C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-mermaid\\node_modules\\mermaid\\dist\\mermaid.js:192401:21)\n\n"
+  },
+  "verificaciones_fallidas": [
+    "El CSV contiene una fila con una cantidad incorrecta de campos.",
+    "Fila CSV ausente o alterada: 'A;B | \"C\"'.",
+    "Mermaid CLI no produjo un SVG válido."
+  ],
+  "estado": "FALLIDA"
+}

@@ -1,0 +1,6 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Entrada protegida
+
+    p(("Procesar"))
+

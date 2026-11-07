@@ -1,0 +1,10 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Escapes
+
+    end["Caja \\\"A\\\""]
+    p(("Ruta C:\\\\datos"))
+    a@{ shape: datastore, label: "A < B & C" }
+
+    end -->|"A;B | \\\"C\\\""| p
+    p -->|"Guardar"| a

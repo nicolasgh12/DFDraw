@@ -1,0 +1,563 @@
+diff --git a/Makefile b/Makefile
+index df656dd..fff549d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,10 +1,9 @@
+ CC = gcc
+ 
+-CFLAGS = -Wall -Wextra -std=c11 -g
++CFLAGS = -Wall -Wextra -g
+ 
+ TARGET = dfdc
+ 
+-
+ OBJECTS = \
+ 	main.o \
+ 	ast.o \
+diff --git a/diccionario.c b/diccionario.c
+new file mode 100644
+index 0000000..3a0e486
+--- /dev/null
++++ b/diccionario.c
+@@ -0,0 +1,59 @@
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include "diccionario.h"
++
++typedef struct {
++    char nombre[150];
++    char tipo[50];
++    char definicion[500];
++} EntradaDicc;
++
++EntradaDicc diccionario[1000];
++int total_entradas = 0;
++
++void registrar_diccionario(const char* nombre, const char* tipo) {
++    for(int i = 0; i < total_entradas; i++) {
++        if(strcmp(diccionario[i].nombre, nombre) == 0 && strcmp(diccionario[i].tipo, tipo) == 0) return;
++    }
++    strcpy(diccionario[total_entradas].nombre, nombre);
++    strcpy(diccionario[total_entradas].tipo, tipo);
++    strcpy(diccionario[total_entradas].definicion, "");
++    total_entradas++;
++}
++
++void asignar_definicion(const char* nombre, const char* definicion, int linea) {
++    int encontrado = 0;
++    for(int i = 0; i < total_entradas; i++) {
++        if(strcmp(diccionario[i].nombre, nombre) == 0) {
++            strcpy(diccionario[i].definicion, definicion);
++            encontrado = 1;
++            break;
++        }
++    }
++    if(!encontrado) {
++        printf("Error Semantico (Analisis Semantico) en linea %d: El elemento '%s' no esta declarado como almacen, flujo, estructura o elemento.\n", linea, nombre);
++    }
++}
++
++void imprimir_tabla(FILE* f, const char* tipo, const char* col1, const char* col3) {
++    /* Dejamos la columna central vac�a en el encabezado (;;), empujando col3 a la derecha */
++    fprintf(f, "%s;;%s\n", col1, col3);
++    for(int i = 0; i < total_entradas; i++) {
++        if(strcmp(diccionario[i].tipo, tipo) == 0) {
++            /* Imprimimos el nombre, luego una columna para el =, y luego la definici�n */
++            fprintf(f, "%s;=;%s\n", diccionario[i].nombre, diccionario[i].definicion);
++        }
++    }
++    fprintf(f, "\n");
++}
++
++void generar_csv_diccionario(const char* filename) {
++    FILE* f = fopen(filename, "w");
++    if(!f) return;
++    imprimir_tabla(f, "ALMACEN", "ALMACENES DE DATOS", "ELEMENTOS");
++    imprimir_tabla(f, "FLUJO", "FLUJO", "COMPONENTES");
++    imprimir_tabla(f, "ESTRUCTURA", "ESTRUCTURA DE DATOS", "COMPONENTES");
++    imprimir_tabla(f, "ELEMENTO", "ELEMENTO", "COMPONENTES");
++    fclose(f);
++}
+diff --git a/diccionario.h b/diccionario.h
+new file mode 100644
+index 0000000..574fb0c
+--- /dev/null
++++ b/diccionario.h
+@@ -0,0 +1,8 @@
++#ifndef DICCIONARIO_H
++#define DICCIONARIO_H
++
++void registrar_diccionario(const char* nombre, const char* tipo);
++void asignar_definicion(const char* nombre, const char* definicion, int linea);
++void generar_csv_diccionario(const char* filename);
++
++#endif
+diff --git a/lexer.l b/lexer.l
+new file mode 100644
+index 0000000..f257bbe
+--- /dev/null
++++ b/lexer.l
+@@ -0,0 +1,83 @@
++%{
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "parser.tab.h"
++
++int lexical_errors = 0;
++
++static char *copy_string(const char *text) {
++    size_t length = strlen(text);
++    char *copy = malloc(length + 1);
++    if (copy == NULL) {
++        fprintf(stderr, "Error: no se pudo reservar memoria.\n");
++        exit(EXIT_FAILURE);
++    }
++    memcpy(copy, text, length + 1);
++    return copy;
++}
++
++static char *remove_quotes(const char *text) {
++    size_t length = strlen(text);
++    if (length < 2) {
++        return copy_string("");
++    }
++    char *result = malloc(length - 1);
++    if (result == NULL) {
++        fprintf(stderr, "Error: no se pudo reservar memoria.\n");
++        exit(EXIT_FAILURE);
++    }
++    memcpy(result, text + 1, length - 2);
++    result[length - 2] = '\0';
++    return result;
++}
++%}
++
++%option noyywrap
++%option yylineno
++
++ID      [a-zA-Z_][a-zA-Z0-9_]*
++STRING  \"([^\"\\]|\\.)*\"
++
++%%
++
++"DFD"           { return T_DFD; }
++"ENTIDAD"       { return T_ENTIDAD; }
++"PROCESO"       { return T_PROCESO; }
++"ALMACEN"       { return T_ALMACEN; }
++"FLUJO"         { return T_FLUJO; }
++
++"ESTRUCTURA"    { return T_ESTRUCTURA; }
++"ELEMENTO"      { return T_ELEMENTO; }
++
++"->"            { return T_ARROW; }
++"="             { return T_IGUAL; }
++"+"             { return T_MAS; }
++"|"             { return T_PIPE; }
++"-"             { return T_GUION; }
++
++"{"             { return T_LLAVE_A; }
++"}"             { return T_LLAVE_C; }
++"["             { return T_CORCHETE_A; }
++"]"             { return T_CORCHETE_C; }
++"("             { return T_PARENTESIS_A; }
++")"             { return T_PARENTESIS_C; }
++";"             { return ';'; }
++
++[0-9]+          { yylval.str = copy_string(yytext); return T_NUMERO; }
++
++{STRING}        { yylval.str = remove_quotes(yytext); return T_STRING; }
++{ID}            { yylval.str = copy_string(yytext); return T_ID; }
++
++"//".*          { /* Ignorar comentario */ }
++"#".*           { /* Ignorar comentario */ }
++[ \t\r\n]+      { /* Ignorar */ }
++
++.               {
++                    fprintf(stderr, "Error lexico [linea %d]: caracter no reconocido '%s'.\n", yylineno, yytext);
++                    lexical_errors++;
++                    return T_INVALID;
++                }
++
++%%
+\ No newline at end of file
+diff --git a/main.c b/main.c
+index 3dd414e..298abbc 100644
+--- a/main.c
++++ b/main.c
+@@ -4,6 +4,8 @@
+ #include "ast.h"
+ #include "semantic.h"
+ #include "mermaid.h"
++#include "diccionario.h" /* NUEVO: Cabecera del diccionario de datos */
++
+ 
+ 
+ /*
+@@ -217,6 +219,14 @@ int main(
+     );
+ 
+ 
++    /* NUEVO: Generar el archivo CSV del diccionario de datos */
++    generar_csv_diccionario("diccionario.csv");
++
++    printf(
++        "Diccionario CSV generado: diccionario.csv\n"
++    );
++
++
+     printf(
+         "Compilacion finalizada correctamente.\n"
+     );
+diff --git a/parser.y b/parser.y
+new file mode 100644
+index 0000000..aef762d
+--- /dev/null
++++ b/parser.y
+@@ -0,0 +1,343 @@
++%{
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "ast.h"
++#include "diccionario.h" /* NUEVO: Cabecera del generador de diccionario */
++
++/*
++ * Funcion generada por Flex.
++ */
++int yylex(void);
++
++/*
++ * Funcion utilizada por Bison para informar errores.
++ */
++void yyerror(const char *message);
++
++/*
++ * Numero de linea mantenido por Flex.
++ */
++extern int yylineno;
++
++/*
++ * Raiz del AST generado.
++ */
++AstNode *ast_root = NULL;
++
++/*
++ * Cantidad de errores sintacticos.
++ */
++int syntax_errors = 0;
++
++%}
++
++/*
++ * ast.h debe estar disponible tambien en parser.tab.h
++ * porque YYSTYPE utiliza AstNode.
++ */
++%code requires {
++    #include "ast.h"
++}
++
++/*
++ * Bison muestra mensajes de error mas descriptivos.
++ */
++%define parse.error verbose
++
++/* =========================
++   Valores semanticos
++   ========================= */
++
++%union {
++    char *str;
++    AstNode *node;
++}
++
++/* =========================
++   Tokens
++   ========================= */
++
++%token T_DFD
++%token T_ENTIDAD
++%token T_PROCESO
++%token T_ALMACEN
++%token T_FLUJO
++%token T_ARROW
++%token T_INVALID
++
++/* NUEVO: Tokens para el diccionario de datos */
++%token T_ESTRUCTURA
++%token T_ELEMENTO
++%token T_IGUAL
++%token T_MAS
++%token T_LLAVE_A
++%token T_LLAVE_C
++%token T_CORCHETE_A
++%token T_CORCHETE_C
++%token T_PARENTESIS_A
++%token T_PARENTESIS_C
++%token T_PIPE
++%token T_GUION
++
++%token <str> T_ID
++%token <str> T_STRING
++%token <str> T_NUMERO /* NUEVO: Captura el valor numérico (ej: repeticiones) */
++
++/* =========================
++   Tipos de no terminales
++   ========================= */
++
++%type <node> programa
++%type <node> declaraciones
++%type <node> declaracion
++%type <node> entidad
++%type <node> proceso
++%type <node> almacen
++%type <node> flujo
++
++/* NUEVO: Tipos para las reglas del diccionario */
++%type <node> estructura
++%type <node> elemento
++%type <node> definicion_dicc
++%type <str> expresion_dicc
++%type <str> termino_dicc
++%type <str> lista_opciones
++
++/* =========================
++   Simbolo inicial
++   ========================= */
++
++%start programa
++
++/*
++ * Si se produce un error sintactico y Bison descarta
++ * un ID o STRING, se libera la memoria.
++ */
++%destructor { free($$); } <str>
++
++%%
++
++/* =========================
++   Programa completo
++   ========================= */
++
++programa:
++    T_DFD T_STRING T_LLAVE_A declaraciones T_LLAVE_C opt_semicolon
++    {
++        ast_root = ast_create_dfd($2, $4);
++        free($2);
++        $$ = ast_root;
++    }
++;
++
++/* =========================
++   Declaraciones
++   ========================= */
++
++declaraciones:
++    %empty
++    {
++        $$ = NULL;
++    }
++    | declaraciones declaracion
++    {
++        /* ast_append maneja la union de los nodos del AST.
++           Si le pasamos NULL (como en los nodos del diccionario),
++           simplemente los ignora y mantiene limpio el arbol. */
++        $$ = ast_append($1, $2);
++    }
++;
++
++declaracion:
++    entidad { $$ = $1; }
++    | proceso { $$ = $1; }
++    | almacen { $$ = $1; }
++    | flujo { $$ = $1; }
++    /* NUEVO: Se agregan las declaraciones del diccionario */
++    | estructura { $$ = $1; }
++    | elemento { $$ = $1; }
++    | definicion_dicc { $$ = $1; }
++;
++
++/* =========================
++   Entidad externa
++   ========================= */
++
++entidad:
++    T_ENTIDAD T_ID T_STRING ';'
++    {
++        $$ = ast_create_named(AST_ENTITY, $2, $3, yylineno);
++        free($2);
++        free($3);
++    }
++;
++
++/* =========================
++   Proceso
++   ========================= */
++
++proceso:
++    T_PROCESO T_ID T_STRING ';'
++    {
++        $$ = ast_create_named(AST_PROCESS, $2, $3, yylineno);
++        free($2);
++        free($3);
++    }
++;
++
++/* =========================
++   Almacen
++   ========================= */
++
++almacen:
++    T_ALMACEN T_ID T_STRING ';'
++    {
++        registrar_diccionario($2, "ALMACEN"); /* NUEVO: Registro en diccionario */
++        $$ = ast_create_named(AST_STORE, $2, $3, yylineno);
++        free($2);
++        free($3);
++    }
++;
++
++/* =========================
++   Flujo
++   ========================= */
++
++flujo:
++    T_FLUJO T_ID T_ARROW T_ID T_STRING ';'
++    {
++        registrar_diccionario($5, "FLUJO"); /* NUEVO: Registro de flujo por su nombre literal */
++        $$ = ast_create_flow($2, $4, $5, yylineno);
++        free($2);
++        free($4);
++        free($5);
++    }
++;
++
++/* =========================
++   Punto y coma opcional
++   despues del bloque DFD
++   ========================= */
++
++opt_semicolon:
++    %empty
++    | ';'
++;
++
++/* =======================================================
++   REGLAS DEL DICCIONARIO DE DATOS (NUEVAS)
++   ======================================================= */
++
++estructura:
++    T_ESTRUCTURA T_ID T_STRING ';'
++    {
++        registrar_diccionario($2, "ESTRUCTURA");
++        $$ = NULL; /* No interfiere con el AST grafico */
++        free($2);
++        free($3);
++    }
++;
++
++elemento:
++    T_ELEMENTO T_ID T_STRING ';'
++    {
++        registrar_diccionario($2, "ELEMENTO");
++        $$ = NULL; /* No interfiere con el AST grafico */
++        free($2);
++        free($3);
++    }
++;
++
++definicion_dicc:
++    T_ID T_IGUAL expresion_dicc ';'
++    {
++        asignar_definicion($1, $3, yylineno);
++        $$ = NULL;
++        free($1);
++        free($3);
++    }
++    | T_STRING T_IGUAL expresion_dicc ';'
++    {
++        asignar_definicion($1, $3, yylineno);
++        $$ = NULL;
++        free($1);
++        free($3);
++    }
++;
++
++expresion_dicc:
++    termino_dicc { $$ = $1; }
++    | expresion_dicc T_MAS termino_dicc
++    {
++        $$ = malloc(strlen($1) + strlen($3) + 4);
++        sprintf($$, "%s + %s", $1, $3);
++        free($1);
++        free($3);
++    }
++;
++
++termino_dicc:
++    T_ID { $$ = strdup($1); }
++    | T_STRING { $$ = strdup($1); }
++    | T_NUMERO { $$ = strdup($1); }
++    | T_LLAVE_A expresion_dicc T_LLAVE_C
++    {
++        $$ = malloc(strlen($2) + 5);
++        sprintf($$, "{ %s }", $2);
++        free($2);
++    }
++    | T_NUMERO T_LLAVE_A expresion_dicc T_LLAVE_C T_NUMERO
++    {
++        $$ = malloc(strlen($1) + strlen($3) + strlen($5) + 6);
++        sprintf($$, "%s{%s}%s", $1, $3, $5);
++        free($1);
++        free($3);
++        free($5);
++    }
++    | T_PARENTESIS_A expresion_dicc T_PARENTESIS_C
++    {
++        $$ = malloc(strlen($2) + 5);
++        sprintf($$, "( %s )", $2);
++        free($2);
++    }
++    | T_CORCHETE_A lista_opciones T_CORCHETE_C
++    {
++        $$ = malloc(strlen($2) + 5);
++        sprintf($$, "[ %s ]", $2);
++        free($2);
++    }
++    | termino_dicc T_GUION termino_dicc
++    {
++        $$ = malloc(strlen($1) + strlen($3) + 4);
++        sprintf($$, "%s-%s", $1, $3);
++        free($1);
++        free($3);
++    }
++;
++
++lista_opciones:
++    expresion_dicc { $$ = $1; }
++    | lista_opciones T_PIPE expresion_dicc
++    {
++        $$ = malloc(strlen($1) + strlen($3) + 4);
++        sprintf($$, "%s | %s", $1, $3);
++        free($1);
++        free($3);
++    }
++;
++
++%%
++
++void yyerror(const char *message)
++{
++    fprintf(
++        stderr,
++        "Error sintactico [linea %d]: %s.\n",
++        yylineno,
++        message
++    );
++
++    syntax_errors++;
++}
+\ No newline at end of file

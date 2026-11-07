@@ -1,0 +1,11 @@
+parser.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+parser.y: warning: shift/reduce conflict on token T_GUION [-Wcounterexamples]
+  Example: termino_dicc T_GUION termino_dicc • T_GUION termino_dicc
+  Shift derivation
+    termino_dicc
+    ↳ 30: termino_dicc T_GUION termino_dicc
+                               ↳ 30: termino_dicc • T_GUION termino_dicc
+  Reduce derivation
+    termino_dicc
+    ↳ 30: termino_dicc                              T_GUION termino_dicc
+          ↳ 30: termino_dicc T_GUION termino_dicc •

@@ -1,0 +1,18 @@
+{
+  "paginas_word_y_pdf": 24,
+  "paginas_con_png_identico": 24,
+  "resolucion_comparacion_ppp": 144,
+  "texto_por_pagina_identico": true,
+  "paginas_en_blanco": 0,
+  "paginas_con_color": 0,
+  "tablas_editables": 5,
+  "figuras": 7,
+  "svg_en_docx": 6,
+  "imagenes_en_pdf": 7,
+  "alternativas": 21,
+  "fallas_originales_documentadas": 8,
+  "sha256": {
+    "Informe_Compiladores.pdf": "bfa5fd4e6f24f4f5e48e593f397ca29f68a4938e5247cc18a344c150766f10dc",
+    "Informe_Compiladores.docx": "eff4760cbc37a3e2f2a4394cd7bc810f2e91f8f5b71f979247fc2dec3b73cda6"
+  }
+}

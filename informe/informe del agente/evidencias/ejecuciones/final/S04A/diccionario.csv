@@ -1,0 +1,12 @@
+ALMACENES DE DATOS;;ELEMENTOS
+archivo;=;{ pedido + 1{cantidad}20 }
+
+FLUJO;;COMPONENTES
+Datos de compra;=;pedido
+
+ESTRUCTURA DE DATOS;;COMPONENTES
+pedido;=;Nombre + ( cantidad ) + [ A | B ]
+
+ELEMENTO;;COMPONENTES
+cantidad;=;1-99
+

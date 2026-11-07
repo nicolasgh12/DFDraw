@@ -1,0 +1,124 @@
+GNU Make 4.4.1
+gcc (GCC) 15.3.0
+bison (GNU Bison) 3.8.2
+flex 2.6.4
++ make clean
+rm -f \
+	dfdc \
+	dfdc.exe \
+	*.o \
+	lex.yy.c \
+	parser.tab.c \
+	parser.tab.h \
+	parser.output \
+	salida.mmd
+exit=0
++ make
+gcc -Wall -Wextra -g -c main.c
+gcc -Wall -Wextra -g -c ast.c
+gcc -Wall -Wextra -g -c semantic.c
+gcc -Wall -Wextra -g -c mermaid.c
+bison -d -Wall parser.y
+parser.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+parser.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+gcc -Wall -Wextra -g -c parser.tab.c
+flex lexer.l
+gcc -Wall -Wextra -g -c lex.yy.c
+lex.yy.c:1367:16: warning: 'input' defined but not used [-Wunused-function]
+ 1367 | #else
+      |                ^    
+lex.yy.c:1320:17: warning: 'yyunput' defined but not used [-Wunused-function]
+ 1320 | 
+      |                 ^      
+gcc -Wall -Wextra -g main.o ast.o semantic.o mermaid.o parser.tab.o lex.yy.o -o dfdc
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: main.o: in function `main':
+/c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/main.c:223:(.text+0x2b7): undefined reference to `generar_csv_diccionario'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: parser.tab.o: in function `yyparse':
+/c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:197:(.text+0xfd8): undefined reference to `registrar_diccionario'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:211:(.text+0x1062): undefined reference to `registrar_diccionario'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:236:(.text+0x110c): undefined reference to `registrar_diccionario'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:246:(.text+0x1162): undefined reference to `registrar_diccionario'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:256:(.text+0x11cb): undefined reference to `asignar_definicion'
+/usr/lib/gcc/x86_64-pc-cygwin/15.3.0/../../../../x86_64-pc-cygwin/bin/ld: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/parser.y:263:(.text+0x1234): undefined reference to `asignar_definicion'
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:20: dfdc] Error 1
+exit=2
++ gcc -Wall -Wextra -g -c diccionario.c
+exit=0
++ make con OBJECTS ampliado
+gcc -Wall -Wextra -g main.o ast.o semantic.o mermaid.o parser.tab.o lex.yy.o diccionario.o -o dfdc
+exit=0
++ make test con OBJECTS ampliado
+bash tests/run_tests.sh
+----------------------------------------
+Prueba: minimo_valido
+Esperado: VALIDO
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/tests/tmp/minimo_valido.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
+[OK] minimo_valido
+
+----------------------------------------
+Prueba: turnos_valido
+Esperado: VALIDO
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: /c/Users/Usuario/AppData/Local/Temp/dfdraw-audit-baseline-3560506/tests/tmp/turnos_valido.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
+[OK] turnos_valido
+
+----------------------------------------
+Prueba: error_lexico
+Esperado: ERROR
+Error lexico [linea 3]: caracter no reconocido '@'.
+Error sintactico [linea 3]: syntax error, unexpected T_INVALID, expecting T_IGUAL.
+
+Analisis lexico: ERROR (1 error/es).
+[OK] error_lexico: error detectado correctamente
+
+----------------------------------------
+Prueba: error_sintactico
+Esperado: ERROR
+Analisis lexico: OK
+Error sintactico [linea 5]: syntax error, unexpected T_PROCESO, expecting ';'.
+Analisis sintactico: ERROR.
+[OK] error_sintactico: error detectado correctamente
+
+----------------------------------------
+Prueba: semantico_no_declarado
+Esperado: ERROR
+Analisis lexico: OK
+Analisis sintactico: OK
+Error semantico [linea 7]: el destino 'p2' del flujo no fue declarado.
+Analisis semantico: ERROR (1 error/es).
+[OK] semantico_no_declarado: error detectado correctamente
+
+----------------------------------------
+Prueba: semantico_duplicado
+Esperado: ERROR
+Error semantico [linea 5]: identificador duplicado 'cliente'. Ya fue declarado anteriormente como ENTIDAD.
+Analisis semantico: ERROR (1 error/es).
+Analisis lexico: OK
+Analisis sintactico: OK
+[OK] semantico_duplicado: error detectado correctamente
+
+----------------------------------------
+Prueba: semantico_flujo_invalido
+Esperado: ERROR
+Analisis lexico: OK
+Error semantico [linea 7]: flujo invalido 'cliente -> proveedor'. Todo flujo de datos debe involucrar al menos un PROCESO.
+Analisis sintactico: OK
+Analisis semantico: ERROR (1 error/es).
+[OK] semantico_flujo_invalido: error detectado correctamente
+
+========================================
+RESULTADO
+========================================
+Pruebas correctas: 7
+Pruebas fallidas:  0
+exit=0

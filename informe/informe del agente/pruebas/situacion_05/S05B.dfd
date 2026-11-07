@@ -1,0 +1,4 @@
+DFD "Clave ausente" {
+  PROCESO p "Procesar";
+  ausente = "dato";
+}

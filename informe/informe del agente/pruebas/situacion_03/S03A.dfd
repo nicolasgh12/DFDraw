@@ -1,0 +1,6 @@
+# cabecera
+DFD "Tokens" {
+	PROCESO DFD_2 "Proceso"; // @ ignorado
+  ENTIDAD _Origen9 "Origen";
+  FLUJO _Origen9->DFD_2 "Dato";
+}

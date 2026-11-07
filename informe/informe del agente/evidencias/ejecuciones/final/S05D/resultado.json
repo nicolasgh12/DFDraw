@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "./diccionario.csv"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05D-ym404b3s",
+  "codigo": 1,
+  "stdout": "",
+  "stderr": "Error: el archivo fuente, la salida Mermaid y diccionario.csv deben ser archivos distintos.\n",
+  "id": "S05D",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

@@ -1,0 +1,47 @@
+3560506 2026-11-04 Implementacion del diccionario de datos en CSV y actualizacion del compilador
+
+M	Makefile
+A	diccionario.c
+A	diccionario.csv
+A	diccionario.h
+A	examples/valid/atencion_chat.dfd
+A	examples/valid/prisma.dfd
+A	examples/valid/simulacion_trafico.dfd
+A	lex.yy.c
+A	lexer.l
+D	lexer.l.c
+M	main.c
+D	parser.c
+A	parser.tab.c
+A	parser.tab.h
+A	parser.y
+A	prueba.dfd
+A	salida.mmd
+M	scripts/render.sh
+M	tests/run_tests.sh
+eb01b33 2026-10-23 Add files via upload
+
+A	Makefile
+M	README.md
+A	ast.c
+A	ast.h
+A	docs/GRAMATICA.md
+A	examples/invalid/lexico.dfd
+A	examples/invalid/semantico_duplicado.dfd
+A	examples/invalid/semantico_flujo_invalido.dfd
+A	examples/invalid/semantico_no_declarado.dfd
+A	examples/invalid/sintactico.dfd
+A	examples/valid/minimo.dfd
+A	examples/valid/turnos.dfd
+A	lexer.l.c
+A	main.c
+A	mermaid.c
+A	mermaid.h
+A	parser.c
+A	scripts/render.sh
+A	semantic.c
+A	semantic.h
+A	tests/run_tests.sh
+5782ac8 2026-10-23 Initial commit
+
+A	README.md

@@ -1,0 +1,21 @@
+DFD "Capacidad" {
+  PROCESO p "Procesar";
+  ALMACEN registro "Registro";
+  ELEMENTO
+    componente_item01valor_item02valor_item03valor_item04valor_item05valor_item06valor_item07valor_item08valor_item09valor_item10valor_item11valor_item12valor_item13valor_item14valor_item15valor
+    "Nombre extenso";
+  ELEMENTO extenso "Definicion extensa";
+  ELEMENTO guardia "Siguiente registro";
+  extenso
+    = "pieza_01_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_02_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_03_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_04_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_05_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_06_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_07_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_08_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_09_contenido_literal_extenso_contenido_literal_extenso_fin" +
+      "pieza_10_contenido_literal_extenso_contenido_literal_extenso_fin";
+  guardia = "intacto";
+}

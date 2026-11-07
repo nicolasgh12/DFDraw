@@ -180,39 +180,14 @@ const char *ast_type_name(AstType type)
 
 void ast_free(AstNode *node)
 {
-    if (node == NULL) {
-        return;
+    while (node != NULL) {
+        AstNode *next = node->next;
+        ast_free(node->children);
+        free(node->id);
+        free(node->label);
+        free(node->source);
+        free(node->target);
+        free(node);
+        node = next;
     }
-
-
-    /*
-     * Liberar hijos.
-     */
-    AstNode *child = node->children;
-
-    while (child != NULL) {
-
-        AstNode *next_child = child->next;
-
-        /*
-         * Evitamos que ast_free() intente recorrer
-         * el hermano como parte del nodo.
-         */
-        child->next = NULL;
-
-        ast_free(child);
-
-        child = next_child;
-    }
-
-
-    free(node->id);
-
-    free(node->label);
-
-    free(node->source);
-
-    free(node->target);
-
-    free(node);
 }

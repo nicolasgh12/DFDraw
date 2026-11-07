@@ -1,0 +1,5 @@
+DFD "Sin proceso" {
+  ENTIDAD e "Externo";
+  ALMACEN a "Archivo";
+  FLUJO e -> a "Carga";
+}

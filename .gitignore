@@ -1,0 +1,11 @@
+/build/
+/dfdc
+/dfdc.exe
+/*.o
+/lex.yy.c
+/parser.tab.c
+/parser.tab.h
+/parser.output
+/salida.mmd
+/diccionario.csv
+__pycache__/

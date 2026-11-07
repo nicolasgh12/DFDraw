@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05B-c291v5ym",
+  "codigo": 0,
+  "stdout": "Error Semantico (Analisis Semantico) en linea 3: El elemento 'ausente' no esta declarado como almacen, flujo, estructura o elemento.\nAnalisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S05B",
+  "archivos_compilador": [
+    "diccionario.csv",
+    "salida.mmd"
+  ],
+  "render": null,
+  "verificaciones_fallidas": [
+    "Código inesperado: 0.",
+    "Diagnóstico ausente en stderr: \"el elemento 'ausente' no esta declarado\".",
+    "Diagnóstico ausente en stderr: '(1 error/es)'.",
+    "Un caso inválido informó éxito en stdout.",
+    "Archivos esperados: []; observados: ['diccionario.csv', 'salida.mmd']."
+  ],
+  "estado": "FALLIDA"
+}

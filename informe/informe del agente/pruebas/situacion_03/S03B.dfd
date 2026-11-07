@@ -1,0 +1,8 @@
+DFD "Escapes" {
+  ENTIDAD end "Caja \"A\"";
+  PROCESO p "Ruta C:\\datos";
+  ALMACEN a "A < B & C";
+  FLUJO end -> p "A;B | \"C\"";
+  FLUJO p -> a "Guardar";
+  "A;B | \"C\"" = "x;y" + "z\"w";
+}

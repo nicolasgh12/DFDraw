@@ -1,0 +1,8 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Adelanto
+
+    p(("Procesar"))
+    almacen@{ shape: datastore, label: "Datos" }
+
+    p -->|"Guardar"| almacen

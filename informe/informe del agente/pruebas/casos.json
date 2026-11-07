@@ -1,0 +1,502 @@
+{
+  "groups": {
+    "01": "Estructura básica",
+    "02": "Estructuras y relaciones",
+    "03": "Análisis léxico",
+    "04": "Análisis sintáctico y expresiones",
+    "05": "Integración y límites"
+  },
+  "cases": [
+    {
+      "id": "S01A",
+      "group": "01",
+      "title": "Programa mínimo",
+      "reason": "Comprueba que un proceso aislado forma un DFD válido y establece la salida base.",
+      "expected": {
+        "nodes": [
+          [
+            "p",
+            "process"
+          ]
+        ],
+        "labels": [
+          "Validar"
+        ]
+      }
+    },
+    {
+      "id": "S01B",
+      "group": "01",
+      "title": "Bloque sin declaraciones",
+      "reason": "Ejercita la producción vacía y el punto y coma de cierre opcional.",
+      "expected": {
+        "nodes": [],
+        "labels": []
+      }
+    },
+    {
+      "id": "S01C",
+      "group": "01",
+      "title": "Archivo de cero bytes",
+      "reason": "Distingue un bloque vacío válido de la falta de cabecera y de tokens.",
+      "expected": {
+        "phase": "sintactico",
+        "diagnostics": [
+          "end of file",
+          "expecting T_DFD"
+        ]
+      }
+    },
+    {
+      "id": "S02A",
+      "group": "02",
+      "title": "Grafo de atención",
+      "reason": "Combina las tres figuras y verifica direcciones, nombres y filas del almacén y de flujos.",
+      "expected": {
+        "nodes": [
+          [
+            "cliente",
+            "entity"
+          ],
+          [
+            "agente",
+            "entity"
+          ],
+          [
+            "recibir",
+            "process"
+          ],
+          [
+            "resolver",
+            "process"
+          ],
+          [
+            "registro",
+            "store"
+          ]
+        ],
+        "edges": [
+          [
+            "cliente",
+            "Consulta",
+            "recibir"
+          ],
+          [
+            "recibir",
+            "Caso",
+            "resolver"
+          ],
+          [
+            "registro",
+            "Historial",
+            "resolver"
+          ],
+          [
+            "resolver",
+            "Derivacion",
+            "agente"
+          ],
+          [
+            "resolver",
+            "Cierre",
+            "registro"
+          ]
+        ],
+        "labels": [
+          "Cliente",
+          "Agente",
+          "Recibir",
+          "Resolver",
+          "Registro",
+          "Consulta",
+          "Caso",
+          "Historial",
+          "Derivacion",
+          "Cierre"
+        ],
+        "rows": [
+          [
+            "registro",
+            "=",
+            ""
+          ],
+          [
+            "Consulta",
+            "=",
+            ""
+          ],
+          [
+            "Cierre",
+            "=",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S02B",
+      "group": "02",
+      "title": "Referencia gráfica adelantada",
+      "reason": "Separa la construcción sintáctica del AST de la resolución global de extremos.",
+      "expected": {
+        "nodes": [
+          [
+            "p",
+            "process"
+          ],
+          [
+            "almacen",
+            "store"
+          ]
+        ],
+        "edges": [
+          [
+            "p",
+            "Guardar",
+            "almacen"
+          ]
+        ],
+        "labels": [
+          "Procesar",
+          "Datos",
+          "Guardar"
+        ],
+        "rows": [
+          [
+            "almacen",
+            "=",
+            ""
+          ],
+          [
+            "Guardar",
+            "=",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S02C",
+      "group": "02",
+      "title": "Conexión sin proceso",
+      "reason": "Usa dos extremos declarados para aislar la restricción de tipo.",
+      "expected": {
+        "phase": "semantico",
+        "diagnostics": [
+          "al menos un PROCESO"
+        ]
+      }
+    },
+    {
+      "id": "S02D",
+      "group": "02",
+      "title": "Infracciones simultáneas",
+      "reason": "Comprueba diagnósticos independientes de duplicado, autorreferencia, nombre vacío y destino ausente.",
+      "expected": {
+        "phase": "semantico",
+        "diagnostics": [
+          "identificador duplicado",
+          "mismo elemento",
+          "debe poseer un nombre",
+          "no fue declarado",
+          "(4 error/es)"
+        ]
+      }
+    },
+    {
+      "id": "S03A",
+      "group": "03",
+      "title": "Comentarios y coincidencia máxima",
+      "reason": "Un prefijo de reservada debe seguir siendo ID. Se cubren ambos comentarios, tabulación y dígitos en el ID.",
+      "expected": {
+        "nodes": [
+          [
+            "DFD_2",
+            "process"
+          ],
+          [
+            "_Origen9",
+            "entity"
+          ]
+        ],
+        "edges": [
+          [
+            "_Origen9",
+            "Dato",
+            "DFD_2"
+          ]
+        ],
+        "labels": [
+          "Proceso",
+          "Origen",
+          "Dato"
+        ]
+      }
+    },
+    {
+      "id": "S03B",
+      "group": "03",
+      "title": "Etiquetas especiales e ID del destino",
+      "reason": "Prueba un identificador reservado por Mermaid y preservación de comillas, barra, punto y coma, barra vertical, ampersand y signos angulares.",
+      "expected": {
+        "htmlLabels": true,
+        "nodes": [
+          [
+            "end",
+            "entity"
+          ],
+          [
+            "p",
+            "process"
+          ],
+          [
+            "a",
+            "store"
+          ]
+        ],
+        "edgeCount": 2,
+        "labels": [
+          "Caja \"A\"",
+          "Ruta C:\\datos",
+          "A < B & C",
+          "A;B | \"C\"",
+          "Guardar"
+        ],
+        "rows": [
+          [
+            "A;B | \"C\"",
+            "=",
+            "x;y + z\"w"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S03C",
+      "group": "03",
+      "title": "Carácter no reconocido",
+      "reason": "Aísla la regla residual y exige un diagnóstico léxico sin duplicación sintáctica.",
+      "expected": {
+        "phase": "lexico",
+        "diagnostics": [
+          "caracter no reconocido",
+          "'@'"
+        ]
+      }
+    },
+    {
+      "id": "S03D",
+      "group": "03",
+      "title": "Literal sin cierre",
+      "reason": "Comprueba que una comilla de apertura sin cierre activa el error léxico.",
+      "expected": {
+        "phase": "lexico",
+        "diagnostics": [
+          "caracter no reconocido"
+        ]
+      }
+    },
+    {
+      "id": "S04A",
+      "group": "04",
+      "title": "Expresiones del diccionario",
+      "reason": "Cubre composición, repetición simple y acotada, grupo opcional, alternativas y rango.",
+      "expected": {
+        "nodes": [
+          [
+            "p",
+            "process"
+          ],
+          [
+            "archivo",
+            "store"
+          ]
+        ],
+        "edges": [
+          [
+            "p",
+            "Datos de compra",
+            "archivo"
+          ]
+        ],
+        "labels": [
+          "Procesar",
+          "Archivo",
+          "Datos de compra"
+        ],
+        "rows": [
+          [
+            "archivo",
+            "=",
+            "{ pedido + 1{cantidad}20 }"
+          ],
+          [
+            "Datos de compra",
+            "=",
+            "pedido"
+          ],
+          [
+            "pedido",
+            "=",
+            "Nombre + ( cantidad ) + [ A | B ]"
+          ],
+          [
+            "cantidad",
+            "=",
+            "1-99"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S04B",
+      "group": "04",
+      "title": "Guion encadenado y concatenación",
+      "reason": "Ejercita el conflicto original de agrupación y el tratamiento textual de identificadores en el lado derecho.",
+      "expected": {
+        "nodes": [],
+        "labels": [],
+        "rows": [
+          [
+            "rango",
+            "=",
+            "1-2-3 + referencia"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S04C",
+      "group": "04",
+      "title": "Punto y coma interno ausente",
+      "reason": "Los tokens son reconocibles, pero la declaración queda abierta ante la siguiente reservada.",
+      "expected": {
+        "phase": "sintactico",
+        "diagnostics": [
+          "unexpected T_PROCESO",
+          "expecting ';'"
+        ]
+      }
+    },
+    {
+      "id": "S04D",
+      "group": "04",
+      "title": "Alternativa incompleta",
+      "reason": "La lista delimitada contiene un operador sin expresión derecha.",
+      "expected": {
+        "phase": "sintactico",
+        "diagnostics": [
+          "unexpected T_CORCHETE_C"
+        ]
+      }
+    },
+    {
+      "id": "S05A",
+      "group": "05",
+      "title": "Nombres y definiciones extensos",
+      "reason": "Supera los límites históricos de 149 y 499 bytes. Verifica además que la siguiente entrada no quede sobrescrita.",
+      "expected": {
+        "labels": [
+          "Procesar",
+          "Registro"
+        ],
+        "nodes": [
+          [
+            "p",
+            "process"
+          ],
+          [
+            "registro",
+            "store"
+          ]
+        ],
+        "rows": [
+          [
+            "componente_item01valor_item02valor_item03valor_item04valor_item05valor_item06valor_item07valor_item08valor_item09valor_item10valor_item11valor_item12valor_item13valor_item14valor_item15valor",
+            "=",
+            ""
+          ],
+          [
+            "extenso",
+            "=",
+            "pieza_01_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_02_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_03_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_04_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_05_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_06_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_07_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_08_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_09_contenido_literal_extenso_contenido_literal_extenso_fin + pieza_10_contenido_literal_extenso_contenido_literal_extenso_fin"
+          ],
+          [
+            "guardia",
+            "=",
+            "intacto"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S05B",
+      "group": "05",
+      "title": "Asignación a clave inexistente",
+      "reason": "Comprueba que el error del diccionario se propaga a stderr y al código del proceso.",
+      "expected": {
+        "phase": "semantico",
+        "diagnostics": [
+          "el elemento 'ausente' no esta declarado",
+          "(1 error/es)"
+        ]
+      }
+    },
+    {
+      "id": "S05C",
+      "group": "05",
+      "title": "CSV bloqueado por un directorio",
+      "reason": "Una carpeta con el nombre fijo del CSV provoca un error real de E/S tras escribir Mermaid.",
+      "expected": {
+        "phase": "io",
+        "setup": "csv_dir",
+        "diagnostics": [
+          "Error durante la generacion del diccionario CSV."
+        ],
+        "files": [
+          "salida.mmd"
+        ]
+      }
+    },
+    {
+      "id": "S05D",
+      "group": "05",
+      "title": "Colisión de las dos salidas",
+      "reason": "La ruta relativa explícita coincide con el CSV fijo y debe fallar antes de escribir archivos.",
+      "expected": {
+        "phase": "io",
+        "output": "./diccionario.csv",
+        "diagnostics": [
+          "deben ser archivos distintos"
+        ]
+      }
+    },
+    {
+      "id": "S05E",
+      "group": "05",
+      "title": "Destino Mermaid inexistente",
+      "reason": "Un directorio padre ausente debe dar error de E/S y dejar el CSV sin crear.",
+      "expected": {
+        "phase": "io",
+        "output": "faltante/salida.mmd",
+        "diagnostics": [
+          "no se pudo crear el archivo Mermaid",
+          "Error durante la generacion de Mermaid."
+        ]
+      }
+    },
+    {
+      "id": "S05F",
+      "group": "05",
+      "title": "Salida sobre la entrada",
+      "reason": "Protege el contenido fuente cuando se selecciona el mismo archivo como salida.",
+      "expected": {
+        "phase": "io",
+        "output": "entrada.dfd",
+        "diagnostics": [
+          "deben ser archivos distintos"
+        ]
+      }
+    }
+  ]
+}

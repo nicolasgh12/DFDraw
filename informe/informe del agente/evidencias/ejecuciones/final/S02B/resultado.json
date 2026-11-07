@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S02B-oy7rixxd",
+  "codigo": 0,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S02B",
+  "archivos_compilador": [
+    "diccionario.csv",
+    "salida.mmd"
+  ],
+  "render": {
+    "argv": [
+      "node",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-mermaid\\node_modules\\@mermaid-js\\mermaid-cli\\src\\cli.js",
+      "-t",
+      "neutral",
+      "-p",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-mermaid-sww95a96\\chrome.json",
+      "-c",
+      "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\informe\\diagramas\\mermaid.json",
+      "-i",
+      "salida.mmd",
+      "-o",
+      "salida.svg"
+    ],
+    "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S02B-oy7rixxd",
+    "codigo": 0,
+    "stdout": "Generating single mermaid chart\n",
+    "stderr": ""
+  },
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

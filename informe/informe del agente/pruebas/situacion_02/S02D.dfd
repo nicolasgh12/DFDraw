@@ -1,0 +1,6 @@
+DFD "Errores" {
+  PROCESO p "Procesar";
+  ENTIDAD p "Duplicado";
+  FLUJO p -> p "";
+  FLUJO p -> falta "Falta";
+}

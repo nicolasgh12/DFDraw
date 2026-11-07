@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "mermaid.h"
 
@@ -20,27 +21,12 @@ static void print_escaped(
 
     while (*current != '\0') {
 
-        if (*current == '"') {
-
-            fprintf(
-                output,
-                "\\\""
-            );
-
-        } else if (*current == '\\') {
-
-            fprintf(
-                output,
-                "\\\\"
-            );
-
-        } else if (*current == '\n') {
-
-            fprintf(
-                output,
-                " "
-            );
-
+        if (*current == '\n' || *current == '\r') {
+            if (*current != '\r' || current[1] != '\n') {
+                fputc(' ', output);
+            }
+        } else if (strchr("\"\\|#<>&`", *current) != NULL) {
+            fprintf(output, "#%u;", (unsigned char)*current);
         } else {
 
             fputc(
@@ -64,7 +50,7 @@ static void generate_entity(
 {
     fprintf(
         output,
-        "    %s[\"",
+        "    n_%s[\"",
         node->id
     );
 
@@ -83,12 +69,7 @@ static void generate_entity(
 /*
  * Genera un proceso.
  *
- * Por ahora utilizamos una representacion
- * provisoria.
- *
- * La notacion grafica definitiva puede
- * modificarse posteriormente solamente
- * en este backend.
+ * El circulo representa una transformacion del DFD.
  */
 static void generate_process(
     FILE *output,
@@ -97,7 +78,7 @@ static void generate_process(
 {
     fprintf(
         output,
-        "    %s((\"",
+        "    n_%s((\"",
         node->id
     );
 
@@ -116,8 +97,7 @@ static void generate_process(
 /*
  * Genera un almacen.
  *
- * La representacion grafica definitiva
- * queda encapsulada aqui.
+ * datastore dibuja las dos lineas paralelas.
  */
 static void generate_store(
     FILE *output,
@@ -126,7 +106,7 @@ static void generate_store(
 {
     fprintf(
         output,
-        "    %s@{ shape: datastore, label: \"",
+        "    n_%s@{ shape: datastore, label: \"",
         node->id
     );
 
@@ -152,7 +132,7 @@ static void generate_flow(
 {
     fprintf(
         output,
-        "    %s -->|\"",
+        "    n_%s -->|\"",
         node->source
     );
 
@@ -163,7 +143,7 @@ static void generate_flow(
 
     fprintf(
         output,
-        "\"| %s\n",
+        "\"| n_%s\n",
         node->target
     );
 }
@@ -308,8 +288,10 @@ int mermaid_generate(
     }
 
 
-    fclose(output);
-
-
+    int error = ferror(output);
+    if (fclose(output) != 0 || error) {
+        fprintf(stderr, "Error: no se pudo escribir el archivo Mermaid '%s'.\n", output_path);
+        return 0;
+    }
     return 1;
 }

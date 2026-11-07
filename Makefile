@@ -1,71 +1,40 @@
 CC = gcc
-
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -std=c11 -g
+BISON = bison
+FLEX = flex
 
 TARGET = dfdc
-
-OBJECTS = \
-	main.o \
-	ast.o \
-	semantic.o \
-	mermaid.o \
-	parser.tab.o \
-	lex.yy.o
-
+BUILD = build
+SOURCES = main ast semantic mermaid diccionario parser.tab lex.yy
+OBJECTS = $(addprefix $(BUILD)/,$(addsuffix .o,$(SOURCES)))
 
 all: $(TARGET)
 
-
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
 
+$(BUILD):
+	mkdir -p $@
 
-parser.tab.c parser.tab.h: parser.y
-	bison -d -Wall parser.y
+$(BUILD)/parser.tab.c $(BUILD)/parser.tab.h &: parser.y | $(BUILD)
+	$(BISON) -d -Wall -Werror=conflicts-sr -Werror=conflicts-rr -o $(BUILD)/parser.tab.c $<
 
+$(BUILD)/lex.yy.c: lexer.l $(BUILD)/parser.tab.h
+	$(FLEX) -o $@ $<
 
-lex.yy.c: lexer.l parser.tab.h
-	flex lexer.l
+$(BUILD)/%.o: %.c | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -c $< -o $@
 
+$(BUILD)/%.o: $(BUILD)/%.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -I. -MMD -MP -c $< -o $@
 
-main.o: main.c ast.h semantic.h mermaid.h
-	$(CC) $(CFLAGS) -c main.c
-
-
-ast.o: ast.c ast.h
-	$(CC) $(CFLAGS) -c ast.c
-
-
-semantic.o: semantic.c semantic.h ast.h
-	$(CC) $(CFLAGS) -c semantic.c
-
-
-mermaid.o: mermaid.c mermaid.h ast.h
-	$(CC) $(CFLAGS) -c mermaid.c
-
-
-parser.tab.o: parser.tab.c ast.h
-	$(CC) $(CFLAGS) -c parser.tab.c
-
-
-lex.yy.o: lex.yy.c parser.tab.h
-	$(CC) $(CFLAGS) -c lex.yy.c
-
+-include $(OBJECTS:.o=.d)
 
 test: all
 	bash tests/run_tests.sh
 
-
 clean:
-	rm -f \
-		$(TARGET) \
-		$(TARGET).exe \
-		*.o \
-		lex.yy.c \
-		parser.tab.c \
-		parser.tab.h \
-		parser.output \
-		salida.mmd
-
+	rm -f $(TARGET) $(TARGET).exe $(BUILD)/*.o $(BUILD)/*.d \
+		$(BUILD)/lex.yy.c $(BUILD)/parser.tab.c $(BUILD)/parser.tab.h
 
 .PHONY: all test clean

@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "entrada.dfd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05F-opes_oz9",
+  "codigo": 0,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: entrada.dfd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S05F",
+  "archivos_compilador": [
+    "diccionario.csv"
+  ],
+  "render": null,
+  "verificaciones_fallidas": [
+    "Código inesperado: 0.",
+    "Diagnóstico ausente en stderr: 'deben ser archivos distintos'.",
+    "Un caso inválido informó éxito en stdout.",
+    "La entrada fue modificada.",
+    "Archivos esperados: []; observados: ['diccionario.csv']."
+  ],
+  "estado": "FALLIDA"
+}

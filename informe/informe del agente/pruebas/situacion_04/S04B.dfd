@@ -1,0 +1,4 @@
+DFD "Guiones" {
+  ELEMENTO rango "Rango";
+  rango = 1-2-3 + referencia;
+}

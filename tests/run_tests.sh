@@ -1,133 +1,41 @@
 #!/usr/bin/env bash
 
-
-ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)" || exit 1
 BIN="$ROOT_DIR/dfdc"
-
-TMP_DIR="$ROOT_DIR/tests/tmp"
-
-
-mkdir -p "$TMP_DIR"
-
+TMP_DIR="$(mktemp -d)" || exit 1
+trap 'rm -f -- "$TMP_DIR"/*.mmd "$TMP_DIR/diccionario.csv"; rmdir -- "$TMP_DIR"' EXIT
+cd "$TMP_DIR" || exit 1
 
 PASSED=0
-
 FAILED=0
 
-
-success_test()
-{
-    NAME="$1"
-
-    FILE="$2"
-
-    OUTPUT="$TMP_DIR/$NAME.mmd"
-
-
+run_test() {
+    local name="$1" expected="$2" input="$3" result
     echo "----------------------------------------"
-    echo "Prueba: $NAME"
-    echo "Esperado: VALIDO"
+    echo "Prueba: $name (codigo esperado: $expected)"
+    "$BIN" "$ROOT_DIR/examples/$input" "$name.mmd"
+    result=$?
 
-
-    if "$BIN" "$FILE" "$OUTPUT"; then
-
-        echo "[OK] $NAME"
-
+    if [[ "$result" -eq "$expected" ]] &&
+       { [[ "$expected" -eq 0 && -s "$name.mmd" && -s diccionario.csv ]] ||
+         [[ "$expected" -eq 1 && ! -e "$name.mmd" && ! -e diccionario.csv ]]; }; then
+        echo "[OK] $name"
         PASSED=$((PASSED + 1))
-
     else
-
-        echo "[ERROR] $NAME deberia haber sido valido"
-
+        echo "[ERROR] $name (codigo real: $result; revisar las salidas)"
         FAILED=$((FAILED + 1))
     fi
-
-
-    echo
+    rm -f -- diccionario.csv
 }
 
-
-failure_test()
-{
-    NAME="$1"
-
-    FILE="$2"
-
-
-    echo "----------------------------------------"
-    echo "Prueba: $NAME"
-    echo "Esperado: ERROR"
-
-
-    if "$BIN" "$FILE" "$TMP_DIR/$NAME.mmd"; then
-
-        echo "[ERROR] $NAME deberia haber sido rechazado"
-
-        FAILED=$((FAILED + 1))
-
-    else
-
-        echo "[OK] $NAME: error detectado correctamente"
-
-        PASSED=$((PASSED + 1))
-    fi
-
-
-    echo
-}
-
-
-success_test \
-    "minimo_valido" \
-    "$ROOT_DIR/examples/valid/minimo.dfd"
-
-
-success_test \
-    "turnos_valido" \
-    "$ROOT_DIR/examples/valid/turnos.dfd"
-
-
-failure_test \
-    "error_lexico" \
-    "$ROOT_DIR/examples/invalid/lexico.dfd"
-
-
-failure_test \
-    "error_sintactico" \
-    "$ROOT_DIR/examples/invalid/sintactico.dfd"
-
-
-failure_test \
-    "semantico_no_declarado" \
-    "$ROOT_DIR/examples/invalid/semantico_no_declarado.dfd"
-
-
-failure_test \
-    "semantico_duplicado" \
-    "$ROOT_DIR/examples/invalid/semantico_duplicado.dfd"
-
-
-failure_test \
-    "semantico_flujo_invalido" \
-    "$ROOT_DIR/examples/invalid/semantico_flujo_invalido.dfd"
-
-
-echo "========================================"
-echo "RESULTADO"
-echo "========================================"
+run_test minimo_valido 0 valid/minimo.dfd
+run_test turnos_valido 0 valid/turnos.dfd
+run_test error_lexico 1 invalid/lexico.dfd
+run_test error_sintactico 1 invalid/sintactico.dfd
+run_test semantico_no_declarado 1 invalid/semantico_no_declarado.dfd
+run_test semantico_duplicado 1 invalid/semantico_duplicado.dfd
+run_test semantico_flujo_invalido 1 invalid/semantico_flujo_invalido.dfd
 
 echo "Pruebas correctas: $PASSED"
-
 echo "Pruebas fallidas:  $FAILED"
-
-
-rm -rf "$TMP_DIR"
-
-
-if [ "$FAILED" -ne 0 ]; then
-    exit 1
-fi
-
-
-exit 0
+[[ "$FAILED" -eq 0 ]]

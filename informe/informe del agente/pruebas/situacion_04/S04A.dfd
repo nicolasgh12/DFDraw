@@ -1,0 +1,11 @@
+DFD "Diccionario" {
+  PROCESO p "Procesar";
+  ALMACEN archivo "Archivo";
+  FLUJO p -> archivo "Datos de compra";
+  ESTRUCTURA pedido "Pedido";
+  ELEMENTO cantidad "Cantidad";
+  archivo = { pedido + 1{cantidad}20 };
+  pedido = "Nombre" + ( cantidad ) + [ "A" | "B" ];
+  "Datos de compra" = pedido;
+  cantidad = 1-99;
+}

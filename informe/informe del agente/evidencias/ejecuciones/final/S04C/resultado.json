@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S04C-nkvn9fj8",
+  "codigo": 1,
+  "stdout": "Analisis lexico: OK\n",
+  "stderr": "Error sintactico [linea 3]: syntax error, unexpected T_PROCESO, expecting ';'.\nAnalisis sintactico: ERROR.\n",
+  "id": "S04C",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

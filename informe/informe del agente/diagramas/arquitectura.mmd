@@ -1,0 +1,9 @@
+flowchart TB
+    D["Programa .dfd"] --> L["Flex · lexer.l"]
+    L -->|"tokens y atributos"| B["Bison · parser.y"]
+    B --> V["Validación del AST gráfico"]
+    B --> K["Registros y definiciones"]
+    V --> G["Backend Mermaid · .mmd"]
+    K --> C["Backend del diccionario · .csv"]
+    V -.->|"habilita salidas"| C
+    G --> R["Mermaid CLI · SVG"]

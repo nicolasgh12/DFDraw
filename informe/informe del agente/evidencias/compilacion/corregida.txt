@@ -1,0 +1,69 @@
++ make clean
+rm -f dfdc dfdc.exe build/*.o build/*.d \
+	build/lex.yy.c build/parser.tab.c build/parser.tab.h
++ make -j4 'CFLAGS=-Wall -Wextra -Werror -std=c11 -g'
+gcc  -Wall -Wextra -Werror -std=c11 -g -MMD -MP -c main.c -o build/main.o
+gcc  -Wall -Wextra -Werror -std=c11 -g -MMD -MP -c ast.c -o build/ast.o
+gcc  -Wall -Wextra -Werror -std=c11 -g -MMD -MP -c semantic.c -o build/semantic.o
+gcc  -Wall -Wextra -Werror -std=c11 -g -MMD -MP -c mermaid.c -o build/mermaid.o
+gcc  -Wall -Wextra -Werror -std=c11 -g -MMD -MP -c diccionario.c -o build/diccionario.o
+bison -d -Wall -Werror=conflicts-sr -Werror=conflicts-rr -o build/parser.tab.c parser.y
+gcc  -Wall -Wextra -Werror -std=c11 -g -I. -MMD -MP -c build/parser.tab.c -o build/parser.tab.o
+flex -o build/lex.yy.c lexer.l
+gcc  -Wall -Wextra -Werror -std=c11 -g -I. -MMD -MP -c build/lex.yy.c -o build/lex.yy.o
+gcc  build/main.o build/ast.o build/semantic.o build/mermaid.o build/diccionario.o build/parser.tab.o build/lex.yy.o  -o dfdc
++ make test
+bash tests/run_tests.sh
+----------------------------------------
+Prueba: minimo_valido (codigo esperado: 0)
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: minimo_valido.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
+[OK] minimo_valido
+----------------------------------------
+Prueba: turnos_valido (codigo esperado: 0)
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: turnos_valido.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
+[OK] turnos_valido
+----------------------------------------
+Prueba: error_lexico (codigo esperado: 1)
+Error lexico [linea 3]: caracter no reconocido '@'.
+
+Analisis lexico: ERROR (1 error/es).
+[OK] error_lexico
+----------------------------------------
+Prueba: error_sintactico (codigo esperado: 1)
+Analisis lexico: OK
+Error sintactico [linea 5]: syntax error, unexpected T_PROCESO, expecting ';'.
+Analisis sintactico: ERROR.
+[OK] error_sintactico
+----------------------------------------
+Prueba: semantico_no_declarado (codigo esperado: 1)
+Analisis lexico: OK
+Analisis sintactico: OK
+Error semantico [linea 7]: el destino 'p2' del flujo no fue declarado.
+Analisis semantico: ERROR (1 error/es).
+[OK] semantico_no_declarado
+----------------------------------------
+Prueba: semantico_duplicado (codigo esperado: 1)
+Analisis lexico: OK
+Analisis sintactico: OK
+Error semantico [linea 5]: identificador duplicado 'cliente'. Ya fue declarado anteriormente como ENTIDAD.
+Analisis semantico: ERROR (1 error/es).
+[OK] semantico_duplicado
+----------------------------------------
+Prueba: semantico_flujo_invalido (codigo esperado: 1)
+Analisis lexico: OK
+Analisis sintactico: OK
+Error semantico [linea 7]: flujo invalido 'cliente -> proveedor'. Todo flujo de datos debe involucrar al menos un PROCESO.
+Analisis semantico: ERROR (1 error/es).
+[OK] semantico_flujo_invalido
+Pruebas correctas: 7
+Pruebas fallidas:  0

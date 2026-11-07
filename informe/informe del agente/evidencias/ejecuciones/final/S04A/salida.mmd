@@ -1,0 +1,8 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Diccionario
+
+    n_p(("Procesar"))
+    n_archivo@{ shape: datastore, label: "Archivo" }
+
+    n_p -->|"Datos de compra"| n_archivo

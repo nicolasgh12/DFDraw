@@ -1,0 +1,45 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S02A-5lfhiw0z",
+  "codigo": 0,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S02A",
+  "archivos_compilador": [
+    "diccionario.csv",
+    "salida.mmd"
+  ],
+  "render": {
+    "argv": [
+      "node",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-mermaid\\node_modules\\@mermaid-js\\mermaid-cli\\src\\cli.js",
+      "-t",
+      "neutral",
+      "-c",
+      "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\informe\\diagramas\\mermaid.json",
+      "-p",
+      "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-mermaid-mwm6h3l0\\chrome.json",
+      "-i",
+      "salida.mmd",
+      "-o",
+      "salida.svg"
+    ],
+    "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S02A-5lfhiw0z",
+    "codigo": 0,
+    "stdout": "Generating single mermaid chart\n",
+    "stderr": ""
+  },
+  "verificaciones_fallidas": [
+    "SVG contiene 7 nodos, se esperaban 5.",
+    "El nodo SVG cliente no tiene la figura rect.",
+    "El nodo SVG agente no tiene la figura rect.",
+    "El nodo SVG recibir no tiene la figura circle.",
+    "El nodo SVG resolver no tiene la figura circle.",
+    "El nodo SVG registro no tiene la figura path."
+  ],
+  "estado": "FALLIDA"
+}

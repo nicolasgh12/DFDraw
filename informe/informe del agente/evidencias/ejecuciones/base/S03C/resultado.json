@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S03C-3l51jm7o",
+  "codigo": 1,
+  "stdout": "",
+  "stderr": "Error lexico [linea 1]: caracter no reconocido '@'.\nError sintactico [linea 1]: syntax error, unexpected T_INVALID.\n\nAnalisis lexico: ERROR (1 error/es).\n",
+  "id": "S03C",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [
+    "Diagnóstico sintáctico secundario tras el error léxico."
+  ],
+  "estado": "FALLIDA"
+}

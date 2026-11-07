@@ -1,0 +1,4 @@
+DFD "Separador" {
+  ENTIDAD e "Externo"
+  PROCESO p "Proceso";
+}

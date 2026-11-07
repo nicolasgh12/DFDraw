@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S03C-_azo7ysw",
+  "codigo": 1,
+  "stdout": "",
+  "stderr": "Error lexico [linea 1]: caracter no reconocido '@'.\n\nAnalisis lexico: ERROR (1 error/es).\n",
+  "id": "S03C",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

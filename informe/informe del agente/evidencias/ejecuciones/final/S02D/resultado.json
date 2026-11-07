@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S02D-buo393mf",
+  "codigo": 1,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\n",
+  "stderr": "Error semantico [linea 3]: identificador duplicado 'p'. Ya fue declarado anteriormente como PROCESO.\nError semantico [linea 4]: el flujo debe poseer un nombre.\nError semantico [linea 4]: el origen y destino del flujo no pueden ser el mismo elemento ('p').\nError semantico [linea 5]: el destino 'falta' del flujo no fue declarado.\nAnalisis semantico: ERROR (4 error/es).\n",
+  "id": "S02D",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

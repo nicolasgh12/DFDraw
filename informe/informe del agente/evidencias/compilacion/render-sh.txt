@@ -1,0 +1,23 @@
++ bash scripts/render.sh Mermaid valido
+Generating single mermaid chart
+exit=0
++ bash scripts/render.sh Mermaid invalido de la base
+Generating single mermaid chart
+
+Error: Parse error on line 3:
+flowchart LR    end["Caja \\\"A\\\""
+----------------^
+Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'subgraph', 'acc_title', 'acc_descr', 'acc_descr_multiline_value', 'AMP', 'COLON', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DOWN', 'DEFAULT', 'NUM', 'COMMA', 'NODE_STRING', 'BRKT', 'MINUS', 'MULT', 'UNICODE_TEXT', 'direction_tb', 'direction_bt', 'direction_rl', 'direction_lr', 'direction_td', got 'end'
+Parser.parseError (C:\Users\Usuario\AppData\Local\Temp\dfdraw-mermaid\node_modules\mermaid\dist\mermaid.js:107122:28)
+    at #evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:388:19)
+    at async ExecutionContext.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/ExecutionContext.js:275:16)
+    at async IsolatedWorld.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/IsolatedWorld.js:97:16)
+    at async CdpJSHandle.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/JSHandle.js:146:20)
+    at async CdpElementHandle.evaluate (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:340:20)
+    at async CdpElementHandle.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js:494:24)
+    at async CdpFrame.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/Frame.js:450:20)
+    at async CdpPage.$eval (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:450:20)
+    at async renderMermaid (file:///C:/Users/Usuario/AppData/Local/Temp/dfdraw-mermaid/node_modules/@mermaid-js/mermaid-cli/src/index.js:266:22)
+    at fromText (C:\Users\Usuario\AppData\Local\Temp\dfdraw-mermaid\node_modules\mermaid\dist\mermaid.js:192401:21)
+
+exit=1

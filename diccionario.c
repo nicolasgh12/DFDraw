@@ -3,57 +3,124 @@
 #include <string.h>
 #include "diccionario.h"
 
-typedef struct {
-    char nombre[150];
-    char tipo[50];
-    char definicion[500];
+typedef struct EntradaDicc {
+    char *nombre;
+    const char *tipo;
+    char *definicion;
+    struct EntradaDicc *siguiente;
 } EntradaDicc;
 
-EntradaDicc diccionario[1000];
-int total_entradas = 0;
+static EntradaDicc *primera;
+static EntradaDicc **siguiente = &primera;
 
-void registrar_diccionario(const char* nombre, const char* tipo) {
-    for(int i = 0; i < total_entradas; i++) {
-        if(strcmp(diccionario[i].nombre, nombre) == 0 && strcmp(diccionario[i].tipo, tipo) == 0) return;
+static void *reservar(size_t size)
+{
+    void *memoria = malloc(size);
+    if (memoria == NULL) {
+        fprintf(stderr, "Error: no se pudo reservar memoria para el diccionario.\n");
+        exit(EXIT_FAILURE);
     }
-    strcpy(diccionario[total_entradas].nombre, nombre);
-    strcpy(diccionario[total_entradas].tipo, tipo);
-    strcpy(diccionario[total_entradas].definicion, "");
-    total_entradas++;
+    return memoria;
 }
 
-void asignar_definicion(const char* nombre, const char* definicion, int linea) {
-    int encontrado = 0;
-    for(int i = 0; i < total_entradas; i++) {
-        if(strcmp(diccionario[i].nombre, nombre) == 0) {
-            strcpy(diccionario[i].definicion, definicion);
-            encontrado = 1;
-            break;
+static char *copiar(const char *texto)
+{
+    size_t size = strlen(texto) + 1;
+    return memcpy(reservar(size), texto, size);
+}
+
+void registrar_diccionario(const char *nombre, const char *tipo)
+{
+    for (EntradaDicc *entrada = primera; entrada != NULL; entrada = entrada->siguiente) {
+        if (strcmp(entrada->nombre, nombre) == 0 && strcmp(entrada->tipo, tipo) == 0) {
+            return;
         }
     }
-    if(!encontrado) {
-        printf("Error Semantico (Analisis Semantico) en linea %d: El elemento '%s' no esta declarado como almacen, flujo, estructura o elemento.\n", linea, nombre);
-    }
+
+    EntradaDicc *entrada = reservar(sizeof *entrada);
+    *entrada = (EntradaDicc){copiar(nombre), tipo, NULL, NULL};
+    *siguiente = entrada;
+    siguiente = &entrada->siguiente;
 }
 
-void imprimir_tabla(FILE* f, const char* tipo, const char* col1, const char* col3) {
-    /* Dejamos la columna central vacía en el encabezado (;;), empujando col3 a la derecha */
-    fprintf(f, "%s;;%s\n", col1, col3);
-    for(int i = 0; i < total_entradas; i++) {
-        if(strcmp(diccionario[i].tipo, tipo) == 0) {
-            /* Imprimimos el nombre, luego una columna para el =, y luego la definición */
-            fprintf(f, "%s;=;%s\n", diccionario[i].nombre, diccionario[i].definicion);
+int asignar_definicion(const char *nombre, const char *definicion, int linea)
+{
+    for (EntradaDicc *entrada = primera; entrada != NULL; entrada = entrada->siguiente) {
+        if (strcmp(entrada->nombre, nombre) == 0) {
+            free(entrada->definicion);
+            entrada->definicion = copiar(definicion);
+            return 1;
         }
     }
-    fprintf(f, "\n");
+
+    fprintf(stderr, "Error semantico [linea %d]: el elemento '%s' no esta declarado "
+            "como almacen, flujo, estructura o elemento.\n", linea, nombre);
+    return 0;
 }
 
-void generar_csv_diccionario(const char* filename) {
-    FILE* f = fopen(filename, "w");
-    if(!f) return;
-    imprimir_tabla(f, "ALMACEN", "ALMACENES DE DATOS", "ELEMENTOS");
-    imprimir_tabla(f, "FLUJO", "FLUJO", "COMPONENTES");
-    imprimir_tabla(f, "ESTRUCTURA", "ESTRUCTURA DE DATOS", "COMPONENTES");
-    imprimir_tabla(f, "ELEMENTO", "ELEMENTO", "COMPONENTES");
-    fclose(f);
+static void imprimir_campo(FILE *archivo, const char *texto)
+{
+    if (texto == NULL) {
+        return;
+    }
+    if (strpbrk(texto, ";\"\r\n") == NULL) {
+        fputs(texto, archivo);
+        return;
+    }
+
+    fputc('"', archivo);
+    for (; *texto != '\0'; texto++) {
+        if (*texto == '"') {
+            fputc('"', archivo);
+        }
+        fputc(*texto, archivo);
+    }
+    fputc('"', archivo);
+}
+
+static void imprimir_tabla(FILE *archivo, const char *tipo, const char *col1, const char *col3)
+{
+    fprintf(archivo, "%s;;%s\n", col1, col3);
+    for (const EntradaDicc *entrada = primera; entrada != NULL; entrada = entrada->siguiente) {
+        if (strcmp(entrada->tipo, tipo) == 0) {
+            imprimir_campo(archivo, entrada->nombre);
+            fputs(";=;", archivo);
+            imprimir_campo(archivo, entrada->definicion);
+            fputc('\n', archivo);
+        }
+    }
+    fputc('\n', archivo);
+}
+
+int generar_csv_diccionario(const char *filename)
+{
+    FILE *archivo = fopen(filename, "w");
+    if (archivo == NULL) {
+        perror(filename);
+        return 0;
+    }
+
+    imprimir_tabla(archivo, "ALMACEN", "ALMACENES DE DATOS", "ELEMENTOS");
+    imprimir_tabla(archivo, "FLUJO", "FLUJO", "COMPONENTES");
+    imprimir_tabla(archivo, "ESTRUCTURA", "ESTRUCTURA DE DATOS", "COMPONENTES");
+    imprimir_tabla(archivo, "ELEMENTO", "ELEMENTO", "COMPONENTES");
+
+    int error = ferror(archivo);
+    if (fclose(archivo) != 0 || error) {
+        fprintf(stderr, "Error: no se pudo escribir el diccionario '%s'.\n", filename);
+        return 0;
+    }
+    return 1;
+}
+
+void liberar_diccionario(void)
+{
+    while (primera != NULL) {
+        EntradaDicc *entrada = primera;
+        primera = entrada->siguiente;
+        free(entrada->nombre);
+        free(entrada->definicion);
+        free(entrada);
+    }
+    siguiente = &primera;
 }

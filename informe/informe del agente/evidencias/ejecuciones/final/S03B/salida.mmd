@@ -1,0 +1,10 @@
+flowchart LR
+    %% Generado automaticamente por dfdc
+    %% DFD: Escapes
+
+    n_end["Caja #34;A#34;"]
+    n_p(("Ruta C:#92;datos"))
+    n_a@{ shape: datastore, label: "A #60; B #38; C" }
+
+    n_end -->|"A;B #124; #34;C#34;"| n_p
+    n_p -->|"Guardar"| n_a

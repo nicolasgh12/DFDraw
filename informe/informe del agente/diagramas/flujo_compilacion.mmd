@@ -1,0 +1,7 @@
+flowchart TB
+    B["Bison con parser.y<br/>genera parser.tab.c y parser.tab.h"]
+    B -->|"cabecera"| F["Flex con lexer.l<br/>genera lex.yy.c"]
+    B -->|"parser.tab.c"| G["GCC · compilación y enlace"]
+    F -->|"lex.yy.c"| G
+    H["Módulos C propios"] --> G
+    G --> E["Ejecutable dfdc"]

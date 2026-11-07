@@ -1,0 +1,67 @@
++ raiz=/c/Users/Usuario/OneDrive/Desktop/DFDraw
+++ mktemp -d
++ tmp=/tmp/tmp.NFnzFk8jfX
++ cd /tmp/tmp.NFnzFk8jfX
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/examples/valid/atencion_chat.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/examples/valid/minimo.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/examples/valid/prisma.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/examples/valid/simulacion_trafico.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/examples/valid/turnos.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ for f in "$raiz"/examples/valid/*.dfd "$raiz"/prueba.dfd
++ /c/Users/Usuario/OneDrive/Desktop/DFDraw/dfdc /c/Users/Usuario/OneDrive/Desktop/DFDraw/prueba.dfd ejemplo.mmd
+Analisis lexico: OK
+Analisis sintactico: OK
+Analisis semantico: OK
+Mermaid generado: ejemplo.mmd
+Diccionario CSV generado: diccionario.csv
+Compilacion finalizada correctamente.
++ test -s ejemplo.mmd
++ test -s diccionario.csv
++ rm -f ejemplo.mmd diccionario.csv
++ cd /c/Users/Usuario/OneDrive/Desktop/DFDraw
++ rmdir /tmp/tmp.NFnzFk8jfX

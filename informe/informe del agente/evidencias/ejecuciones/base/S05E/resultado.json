@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "faltante/salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05E-em3luaoi",
+  "codigo": 1,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\n",
+  "stderr": "Error: no se pudo crear el archivo Mermaid 'faltante/salida.mmd'.\nError durante la generacion de Mermaid.\n",
+  "id": "S05E",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

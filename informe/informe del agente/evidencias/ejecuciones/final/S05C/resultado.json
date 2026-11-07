@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05C-i_8t1w0u",
+  "codigo": 1,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\n",
+  "stderr": "diccionario.csv: Is a directory\nError durante la generacion del diccionario CSV.\n",
+  "id": "S05C",
+  "archivos_compilador": [
+    "salida.mmd"
+  ],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}

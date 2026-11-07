@@ -28,13 +28,19 @@ static char *remove_quotes(const char *text) {
         fprintf(stderr, "Error: no se pudo reservar memoria.\n");
         exit(EXIT_FAILURE);
     }
-    memcpy(result, text + 1, length - 2);
-    result[length - 2] = '\0';
+    size_t written = 0;
+    for (size_t i = 1; i < length - 1; i++) {
+        if (text[i] == '\\' && (text[i + 1] == '\\' || text[i + 1] == '"')) {
+            i++;
+        }
+        result[written++] = text[i];
+    }
+    result[written] = '\0';
     return result;
 }
 %}
 
-%option noyywrap
+%option noyywrap noinput nounput never-interactive
 %option yylineno
 
 ID      [a-zA-Z_][a-zA-Z0-9_]*

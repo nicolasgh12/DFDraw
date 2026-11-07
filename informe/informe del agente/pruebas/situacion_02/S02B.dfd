@@ -1,0 +1,5 @@
+DFD "Adelanto" {
+  FLUJO p -> almacen "Guardar";
+  PROCESO p "Procesar";
+  ALMACEN almacen "Datos";
+}

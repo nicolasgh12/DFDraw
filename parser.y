@@ -1,10 +1,11 @@
 %{
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ast.h"
-#include "diccionario.h" /* NUEVO: Cabecera del generador de diccionario */
+#include "diccionario.h"
 
 /*
  * Funcion generada por Flex.
@@ -20,6 +21,7 @@ void yyerror(const char *message);
  * Numero de linea mantenido por Flex.
  */
 extern int yylineno;
+extern int lexical_errors;
 
 /*
  * Raiz del AST generado.
@@ -30,6 +32,26 @@ AstNode *ast_root = NULL;
  * Cantidad de errores sintacticos.
  */
 int syntax_errors = 0;
+int dictionary_errors = 0;
+
+static char *format_expression(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    int length = vsnprintf(NULL, 0, format, args);
+    va_end(args);
+
+    char *result = length < 0 ? NULL : malloc((size_t)length + 1);
+    if (result == NULL) {
+        fprintf(stderr, "Error: no se pudo construir la expresion del diccionario.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    va_start(args, format);
+    vsnprintf(result, (size_t)length + 1, format, args);
+    va_end(args);
+    return result;
+}
 
 %}
 
@@ -80,6 +102,7 @@ int syntax_errors = 0;
 %token T_PARENTESIS_C
 %token T_PIPE
 %token T_GUION
+%right T_GUION
 
 %token <str> T_ID
 %token <str> T_STRING
@@ -89,7 +112,6 @@ int syntax_errors = 0;
    Tipos de no terminales
    ========================= */
 
-%type <node> programa
 %type <node> declaraciones
 %type <node> declaracion
 %type <node> entidad
@@ -116,6 +138,7 @@ int syntax_errors = 0;
  * un ID o STRING, se libera la memoria.
  */
 %destructor { free($$); } <str>
+%destructor { ast_free($$); } <node>
 
 %%
 
@@ -128,7 +151,6 @@ programa:
     {
         ast_root = ast_create_dfd($2, $4);
         free($2);
-        $$ = ast_root;
     }
 ;
 
@@ -253,14 +275,14 @@ elemento:
 definicion_dicc:
     T_ID T_IGUAL expresion_dicc ';'
     {
-        asignar_definicion($1, $3, yylineno);
+        dictionary_errors += !asignar_definicion($1, $3, yylineno);
         $$ = NULL;
         free($1);
         free($3);
     }
     | T_STRING T_IGUAL expresion_dicc ';'
     {
-        asignar_definicion($1, $3, yylineno);
+        dictionary_errors += !asignar_definicion($1, $3, yylineno);
         $$ = NULL;
         free($1);
         free($3);
@@ -271,47 +293,41 @@ expresion_dicc:
     termino_dicc { $$ = $1; }
     | expresion_dicc T_MAS termino_dicc
     {
-        $$ = malloc(strlen($1) + strlen($3) + 4);
-        sprintf($$, "%s + %s", $1, $3);
+        $$ = format_expression("%s + %s", $1, $3);
         free($1);
         free($3);
     }
 ;
 
 termino_dicc:
-    T_ID { $$ = strdup($1); }
-    | T_STRING { $$ = strdup($1); }
-    | T_NUMERO { $$ = strdup($1); }
+    T_ID { $$ = $1; }
+    | T_STRING { $$ = $1; }
+    | T_NUMERO { $$ = $1; }
     | T_LLAVE_A expresion_dicc T_LLAVE_C
     {
-        $$ = malloc(strlen($2) + 5);
-        sprintf($$, "{ %s }", $2);
+        $$ = format_expression("{ %s }", $2);
         free($2);
     }
     | T_NUMERO T_LLAVE_A expresion_dicc T_LLAVE_C T_NUMERO
     {
-        $$ = malloc(strlen($1) + strlen($3) + strlen($5) + 6);
-        sprintf($$, "%s{%s}%s", $1, $3, $5);
+        $$ = format_expression("%s{%s}%s", $1, $3, $5);
         free($1);
         free($3);
         free($5);
     }
     | T_PARENTESIS_A expresion_dicc T_PARENTESIS_C
     {
-        $$ = malloc(strlen($2) + 5);
-        sprintf($$, "( %s )", $2);
+        $$ = format_expression("( %s )", $2);
         free($2);
     }
     | T_CORCHETE_A lista_opciones T_CORCHETE_C
     {
-        $$ = malloc(strlen($2) + 5);
-        sprintf($$, "[ %s ]", $2);
+        $$ = format_expression("[ %s ]", $2);
         free($2);
     }
     | termino_dicc T_GUION termino_dicc
     {
-        $$ = malloc(strlen($1) + strlen($3) + 4);
-        sprintf($$, "%s-%s", $1, $3);
+        $$ = format_expression("%s-%s", $1, $3);
         free($1);
         free($3);
     }
@@ -321,8 +337,7 @@ lista_opciones:
     expresion_dicc { $$ = $1; }
     | lista_opciones T_PIPE expresion_dicc
     {
-        $$ = malloc(strlen($1) + strlen($3) + 4);
-        sprintf($$, "%s | %s", $1, $3);
+        $$ = format_expression("%s | %s", $1, $3);
         free($1);
         free($3);
     }
@@ -332,6 +347,9 @@ lista_opciones:
 
 void yyerror(const char *message)
 {
+    if (lexical_errors > 0) {
+        return;
+    }
     fprintf(
         stderr,
         "Error sintactico [linea %d]: %s.\n",

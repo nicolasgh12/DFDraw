@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdraw-audit-baseline-3560506\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05C-x18s605q",
+  "codigo": 0,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\nAnalisis semantico: OK\nMermaid generado: salida.mmd\nDiccionario CSV generado: diccionario.csv\nCompilacion finalizada correctamente.\n",
+  "stderr": "",
+  "id": "S05C",
+  "archivos_compilador": [
+    "salida.mmd"
+  ],
+  "render": null,
+  "verificaciones_fallidas": [
+    "Código inesperado: 0.",
+    "Diagnóstico ausente en stderr: 'Error durante la generacion del diccionario CSV.'.",
+    "Un caso inválido informó éxito en stdout."
+  ],
+  "estado": "FALLIDA"
+}

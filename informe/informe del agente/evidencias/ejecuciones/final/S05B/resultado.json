@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\Usuario\\OneDrive\\Desktop\\DFDraw\\dfdc.exe",
+    "entrada.dfd",
+    "salida.mmd"
+  ],
+  "cwd": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\dfdc-S05B-oiajxdzm",
+  "codigo": 1,
+  "stdout": "Analisis lexico: OK\nAnalisis sintactico: OK\n",
+  "stderr": "Error semantico [linea 3]: el elemento 'ausente' no esta declarado como almacen, flujo, estructura o elemento.\nAnalisis semantico: ERROR (1 error/es).\n",
+  "id": "S05B",
+  "archivos_compilador": [],
+  "render": null,
+  "verificaciones_fallidas": [],
+  "estado": "APROBADA"
+}
